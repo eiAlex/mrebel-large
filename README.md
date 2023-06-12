@@ -3,18 +3,21 @@ language:
 - ar
 - ca
 - de
+- el
 - en
 - es
-- fa
 - fr
+- hi
 - it
+- ja
 - ko
 - nl
 - pl
 - pt
 - ru
 - sv
-- uk
+- vi
+- zh
 widget:
 - text: >-
     The Red Hot Chili Peppers were formed in Los Angeles by Kiedis, Flea, guitarist Hillel Slovak and drummer Jack Irons.
