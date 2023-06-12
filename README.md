@@ -27,7 +27,7 @@ tags:
 
 license: cc-by-nc-sa-4.0
 ---
-# RED^{FM}: a Filtered and Multilingual Relation Extraction Dataset
+# RED<sup>FM</sup>: a Filtered and Multilingual Relation Extraction Dataset
 
 This a multilingual version of [REBEL](https://huggingface.co/Babelscape/rebel-large). It can be used as a standalone multulingual Relation Extraction system, or as a pretrained system to be tuned on multilingual Relation Extraction datasets.
 
