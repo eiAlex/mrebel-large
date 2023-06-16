@@ -21,6 +21,8 @@ language:
 widget:
 - text: >-
     Els Red Hot Chili Peppers es van formar a Los Angeles per Kiedis, Flea, el guitarrista Hillel Slovak i el bateria Jack Irons.
+  example_title: "Catalan"
+inference:
   parameters: 
     decoder_start_token_id: 250058
     src_lang: "ca_XX"
