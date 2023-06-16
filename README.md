@@ -20,12 +20,16 @@ language:
 - zh
 widget:
 - text: >-
-    The Red Hot Chili Peppers were formed in Los Angeles by Kiedis, Flea, guitarist Hillel Slovak and drummer Jack Irons.
+    The Red Hot Chili Peppers were formed in Los Angeles by Kiedis, Flea,
+    guitarist Hillel Slovak and drummer Jack Irons.
+  parameters: 
+    decoder_start_token_id: 250058
+    src_lang: "en_XX"
 tags:
 - seq2seq
 - relation-extraction
-
 license: cc-by-nc-sa-4.0
+pipeline_tag: translation
 ---
 # RED<sup>FM</sup>: a Filtered and Multilingual Relation Extraction Dataset
 
