@@ -20,11 +20,11 @@ language:
 - zh
 widget:
 - text: >-
-    The Red Hot Chili Peppers were formed in Los Angeles by Kiedis, Flea,
-    guitarist Hillel Slovak and drummer Jack Irons.
+    Els Red Hot Chili Peppers es van formar a Los Angeles per Kiedis, Flea, el guitarrista Hillel Slovak i el bateria Jack Irons.
   parameters: 
     decoder_start_token_id: 250058
-    src_lang: "en_XX"
+    src_lang: "ca_XX"
+    tgt_lang: "<triplet>"
 tags:
 - seq2seq
 - relation-extraction
@@ -57,31 +57,36 @@ Be aware that the inference widget at the right does not output special tokens, 
 ```python
 from transformers import pipeline
 
-triplet_extractor = pipeline('text2text-generation', model='Babelscape/mrebel-large', tokenizer='Babelscape/mrebel-large')
+triplet_extractor = pipeline('translation_xx_to_yy', model='Babelscape/mrebel-large', tokenizer='Babelscape/mrebel-large')
 # We need to use the tokenizer manually since we need special tokens.
-extracted_text = triplet_extractor.tokenizer.batch_decode([triplet_extractor("The Red Hot Chili Peppers were formed in Los Angeles by Kiedis, Flea, guitarist Hillel Slovak and drummer Jack Irons.", return_tensors=True, return_text=False)[0]["generated_token_ids"]])
+extracted_text = triplet_extractor.tokenizer.batch_decode([triplet_extractor("The Red Hot Chili Peppers were formed in Los Angeles by Kiedis, Flea, guitarist Hillel Slovak and drummer Jack Irons.", decoder_start_token_id=250058, src_lang="en_XX", tgt_lang="<triplet>", return_tensors=True, return_text=False)[0]["translation_token_ids"]]) # change en_XX for the language of the source.
 print(extracted_text[0])
 # Function to parse the generated text and extract the triplets
-def extract_triplets(text):
+def extract_triplets_typed(text):
     triplets = []
-    relation, subject, relation, object_ = '', '', '', ''
+    relation = ''
     text = text.strip()
     current = 'x'
-    for token in text.replace("<s>", "").replace("<pad>", "").replace("</s>", "").split():
-        if token == "<triplet>":
+    subject, relation, object_, object_type, subject_type = '','','','',''
+
+    for token in text.replace("<s>", "").replace("<pad>", "").replace("</s>", "").replace("tp_XX", "").replace("__en__", "").split():
+        if token == "<triplet>" or token == "<relation>":
             current = 't'
             if relation != '':
-                triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
+                triplets.append({'head': subject.strip(), 'head_type': subject_type, 'type': relation.strip(),'tail': object_.strip(), 'tail_type': object_type})
                 relation = ''
             subject = ''
-        elif token == "<subj>":
-            current = 's'
-            if relation != '':
-                triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
-            object_ = ''
-        elif token == "<obj>":
-            current = 'o'
-            relation = ''
+        elif token.startswith("<") and token.endswith(">"):
+            if current == 't' or current == 'o':
+                current = 's'
+                if relation != '':
+                    triplets.append({'head': subject.strip(), 'head_type': subject_type, 'type': relation.strip(),'tail': object_.strip(), 'tail_type': object_type})
+                object_ = ''
+                subject_type = token[1:-1]
+            else:
+                current = 'o'
+                object_type = token[1:-1]
+                relation = ''
         else:
             if current == 't':
                 subject += ' ' + token
@@ -89,10 +94,10 @@ def extract_triplets(text):
                 object_ += ' ' + token
             elif current == 'o':
                 relation += ' ' + token
-    if subject != '' and relation != '' and object_ != '':
-        triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
+    if subject != '' and relation != '' and object_ != '' and object_type != '' and subject_type != '':
+        triplets.append({'head': subject.strip(), 'head_type': subject_type, 'type': relation.strip(),'tail': object_.strip(), 'tail_type': object_type})
     return triplets
-extracted_triplets = extract_triplets(extracted_text[0])
+extracted_triplets = extract_triplets_typed(extracted_text[0])
 print(extracted_triplets)
 ```
 
@@ -101,26 +106,31 @@ print(extracted_triplets)
 ```python
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
-def extract_triplets(text):
+def extract_triplets_typed(text):
     triplets = []
-    relation, subject, relation, object_ = '', '', '', ''
+    relation = ''
     text = text.strip()
     current = 'x'
-    for token in text.replace("<s>", "").replace("<pad>", "").replace("</s>", "").split():
-        if token == "<triplet>":
+    subject, relation, object_, object_type, subject_type = '','','','',''
+
+    for token in text.replace("<s>", "").replace("<pad>", "").replace("</s>", "").replace("tp_XX", "").replace("__en__", "").split():
+        if token == "<triplet>" or token == "<relation>":
             current = 't'
             if relation != '':
-                triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
+                triplets.append({'head': subject.strip(), 'head_type': subject_type, 'type': relation.strip(),'tail': object_.strip(), 'tail_type': object_type})
                 relation = ''
             subject = ''
-        elif token == "<subj>":
-            current = 's'
-            if relation != '':
-                triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
-            object_ = ''
-        elif token == "<obj>":
-            current = 'o'
-            relation = ''
+        elif token.startswith("<") and token.endswith(">"):
+            if current == 't' or current == 'o':
+                current = 's'
+                if relation != '':
+                    triplets.append({'head': subject.strip(), 'head_type': subject_type, 'type': relation.strip(),'tail': object_.strip(), 'tail_type': object_type})
+                object_ = ''
+                subject_type = token[1:-1]
+            else:
+                current = 'o'
+                object_type = token[1:-1]
+                relation = ''
         else:
             if current == 't':
                 subject += ' ' + token
@@ -128,18 +138,19 @@ def extract_triplets(text):
                 object_ += ' ' + token
             elif current == 'o':
                 relation += ' ' + token
-    if subject != '' and relation != '' and object_ != '':
-        triplets.append({'head': subject.strip(), 'type': relation.strip(),'tail': object_.strip()})
+    if subject != '' and relation != '' and object_ != '' and object_type != '' and subject_type != '':
+        triplets.append({'head': subject.strip(), 'head_type': subject_type, 'type': relation.strip(),'tail': object_.strip(), 'tail_type': object_type})
     return triplets
 
 # Load model and tokenizer
-tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
-model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/rebel-large")
+tokenizer = AutoTokenizer.from_pretrained("Babelscape/mrebel-large", src_lang="en_XX", "tgt_lang": "tp_XX") # Here we set English as source language. To change the source language just change it here or swap the first token of the input for your desired language
+model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/mrebel-large")
 gen_kwargs = {
     "max_length": 256,
     "length_penalty": 0,
     "num_beams": 3,
     "num_return_sequences": 3,
+    "forced_bos_token_id": None,
 }
 
 # Text to extract triplets from
@@ -152,6 +163,7 @@ model_inputs = tokenizer(text, max_length=256, padding=True, truncation=True, re
 generated_tokens = model.generate(
     model_inputs["input_ids"].to(model.device),
     attention_mask=model_inputs["attention_mask"].to(model.device),
+    decoder_start_token_id = self.tokenizer.convert_tokens_to_ids("tp_XX"),
     **gen_kwargs,
 )
 
@@ -161,5 +173,5 @@ decoded_preds = tokenizer.batch_decode(generated_tokens, skip_special_tokens=Fal
 # Extract triplets
 for idx, sentence in enumerate(decoded_preds):
     print(f'Prediction triplets sentence {idx}')
-    print(extract_triplets(sentence))
+    print(extract_triplets_typed(sentence))
 ```
