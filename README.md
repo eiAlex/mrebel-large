@@ -146,7 +146,11 @@ def extract_triplets_typed(text):
     return triplets
 
 # Load model and tokenizer
-tokenizer = AutoTokenizer.from_pretrained("Babelscape/mrebel-large", src_lang="en_XX", tgt_lang="tp_XX") # Here we set English as source language. To change the source language just change it here or swap the first token of the input for your desired language
+tokenizer = AutoTokenizer.from_pretrained("Babelscape/mrebel-large", src_lang="en_XX", tgt_lang="tp_XX") 
+# Here we set English ("en_XX") as source language. To change the source language swap the first token of the input for your desired language or change to supported language. For catalan ("ca_XX") or greek ("el_EL") (not included in mBART pretraining) you need a workaround:
+# tokenizer._src_lang = "ca_XX"
+# tokenizer.cur_lang_code_id = tokenizer.convert_tokens_to_ids("ca_XX")
+# tokenizer.set_src_lang_special_tokens("ca_XX")
 model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/mrebel-large")
 gen_kwargs = {
     "max_length": 256,
