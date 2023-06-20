@@ -51,9 +51,9 @@ mREBEL is introduced in the ACL 2023 paper [RED^{FM}: a Filtered and Multilingua
         url = "https://arxiv.org/abs/2306.09802",
     }
 
-The original repository for the paper can be found [here](https://github.com/Babelscape/rebel)
+The original repository for the paper can be found [here](https://github.com/Babelscape/rebel#REDFM)
 
-Be aware that the inference widget at the right does not output special tokens, which are necessary to distinguish the subject, object and relation types. For a demo of REBEL and its pre-training dataset check the [Spaces demo](https://huggingface.co/spaces/Babelscape/rebel-demo).
+Be aware that the inference widget at the right does not output special tokens, which are necessary to distinguish the subject, object and relation types. For a demo of mREBEL and its pre-training dataset check the [Spaces demo](https://huggingface.co/spaces/Babelscape/mrebel-demo).
 
 ## Pipeline usage
 
