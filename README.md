@@ -166,7 +166,7 @@ model_inputs = tokenizer(text, max_length=256, padding=True, truncation=True, re
 generated_tokens = model.generate(
     model_inputs["input_ids"].to(model.device),
     attention_mask=model_inputs["attention_mask"].to(model.device),
-    decoder_start_token_id = self.tokenizer.convert_tokens_to_ids("tp_XX"),
+    decoder_start_token_id = tokenizer.convert_tokens_to_ids("tp_XX"),
     **gen_kwargs,
 )
 
