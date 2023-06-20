@@ -20,18 +20,21 @@ language:
 - zh
 widget:
 - text: >-
-    Els Red Hot Chili Peppers es van formar a Los Angeles per Kiedis, Flea, el guitarrista Hillel Slovak i el bateria Jack Irons.
-  example_title: "Catalan"
+    Els Red Hot Chili Peppers es van formar a Los Angeles per Kiedis, Flea, el
+    guitarrista Hillel Slovak i el bateria Jack Irons.
+  example_title: Catalan
 inference:
-  parameters: 
+  parameters:
     decoder_start_token_id: 250058
-    src_lang: "ca_XX"
-    tgt_lang: "<triplet>"
+    src_lang: ca_XX
+    tgt_lang: <triplet>
 tags:
 - seq2seq
 - relation-extraction
 license: cc-by-nc-sa-4.0
 pipeline_tag: translation
+datasets:
+- Babelscape/SREDFM
 ---
 # RED<sup>FM</sup>: a Filtered and Multilingual Relation Extraction Dataset
 
