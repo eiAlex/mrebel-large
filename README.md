@@ -177,3 +177,7 @@ for idx, sentence in enumerate(decoded_preds):
     print(f'Prediction triplets sentence {idx}')
     print(extract_triplets_typed(sentence))
 ```
+
+## License
+
+This model is licensed under the CC BY-SA 4.0 license. The text of the license can be found [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
