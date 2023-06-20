@@ -35,19 +35,20 @@ pipeline_tag: translation
 ---
 # RED<sup>FM</sup>: a Filtered and Multilingual Relation Extraction Dataset
 
-This a multilingual version of [REBEL](https://huggingface.co/Babelscape/rebel-large). It can be used as a standalone multulingual Relation Extraction system, or as a pretrained system to be tuned on multilingual Relation Extraction datasets.
+This is a multilingual version of [REBEL](https://huggingface.co/Babelscape/rebel-large). It can be used as a standalone multulingual Relation Extraction system, or as a pretrained system to be tuned on multilingual Relation Extraction datasets.
 
-mREBEL is introduced in the ACL 2023 paper [RED^{FM}: a Filtered and Multilingual Relation Extraction Dataset](https://github.com/Babelscape/rebel/blob/main/docs/). We present a new multilingual Relation Extraction dataset and train a multilingual version of REBEL which reframed Relation Extraction as a seq2seq task. The paper can be found [here](https://github.com/Babelscape/rebel/blob/main/docs/). If you use the code or model, please reference this work in your paper:
+mREBEL is introduced in the ACL 2023 paper [RED^{FM}: a Filtered and Multilingual Relation Extraction Dataset](https://arxiv.org/abs/2306.09802). We present a new multilingual Relation Extraction dataset and train a multilingual version of REBEL which reframed Relation Extraction as a seq2seq task. The paper can be found [here](https://arxiv.org/abs/2306.09802). If you use the code or model, please reference this work in your paper:
 
-    @inproceedings{huguet-cabot-et-al-2023-red,
-        title = "RED^{FM}: a Filtered and Multilingual Relation Extraction Dataset",
-        author = "Huguet Cabot, Pere-Llu{\'\i}s  and
+    @inproceedings{huguet-cabot-et-al-2023-redfm-dataset,
+        title = "RED$^{\rm FM}$: a Filtered and Multilingual Relation Extraction Dataset",
+        author = "Huguet Cabot, Pere-Llu{\'\i}s  and Tedeschi, Simone and Ngonga Ngomo, Axel-Cyrille and
           Navigli, Roberto",
-        booktitle = "ACL 2023",
+        booktitle = "Proc. of the 61st Annual Meeting of the Association for Computational Linguistics: ACL 2023",
         month = jul,
         year = "2023",
         address = "Toronto, Canada",
         publisher = "Association for Computational Linguistics",
+        url = "https://arxiv.org/abs/2306.09802",
     }
 
 The original repository for the paper can be found [here](https://github.com/Babelscape/rebel)
