@@ -146,7 +146,7 @@ def extract_triplets_typed(text):
     return triplets
 
 # Load model and tokenizer
-tokenizer = AutoTokenizer.from_pretrained("Babelscape/mrebel-large", src_lang="en_XX", "tgt_lang"="tp_XX") # Here we set English as source language. To change the source language just change it here or swap the first token of the input for your desired language
+tokenizer = AutoTokenizer.from_pretrained("Babelscape/mrebel-large", src_lang="en_XX", tgt_lang="tp_XX") # Here we set English as source language. To change the source language just change it here or swap the first token of the input for your desired language
 model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/mrebel-large")
 gen_kwargs = {
     "max_length": 256,
